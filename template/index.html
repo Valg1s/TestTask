@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} FakeCSV {% endblock %}
+
+{% block content %}
+      <p class="content__top-label">Data schemas</p>
+      <a class="content__top-buttonnew" href="/schema/add">New schema</a>
+    
+  <table class="content_table">
+    <tr>
+      <th class="content__th-number" >#</th>
+      <th class="content__th-title">Title</th>
+      <th class="content__th-modified">Modified</th>
+      <th class="content__th-action">Actions</th>
+    </tr>
+
+    {% for schema in schemas %}
+    <tr>
+      <td class="content__td-number"> {{ forloop.counter }} </td>
+      <td class="content__td-title"> {{ schema.schema_name }} </td>
+      <td class="content__td-modified"> {{ schema.schema_last_modified }} </td>
+      <td class="content__td-action">
+        <a>Edit schema</a>
+        <a>Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

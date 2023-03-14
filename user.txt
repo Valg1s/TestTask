@@ -1,0 +1,5 @@
+login: User
+password: Strongpassword123
+
+login: Admin
+password: 12345

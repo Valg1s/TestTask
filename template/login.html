@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block header%} {% endblock %}
+
+{% block content %}
+
+<div class="content__box">
+
+    <h1 class="content__box-label">Login</h1>
+
+    {% if form.errors %}
+        <p class="content__box-error">Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+        {% else %}
+            <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
+
+    <form class="content__box-login" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        {{ form.username }}
+
+        {{ form.password }}
+
+        <button class="content__box-button" type="submit">Login</button>
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+
+</div>
+
+{% endblock %}

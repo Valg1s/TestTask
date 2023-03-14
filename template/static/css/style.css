@@ -1,0 +1,229 @@
+th,td{
+    border: solid 1px #ECEEEF;
+    text-align: left;
+}
+
+
+button{
+    width: 85px;
+    height: 38px;
+    background: #0275D8;
+    border: 1px solid #0275D8;
+    border-radius: 4px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+    color: #FFFFFF;
+}
+
+.content{
+    background: #FFF;
+}
+
+.content__box{
+    text-align: center;
+    box-sizing: border-box;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 650px;
+    height: 445px;
+    
+
+    border: solid 1px #E5E5E5;
+    border-radius: 4px;
+}
+
+.content__label{
+    width: 86px;
+    height: 79px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 79px;
+
+    color: #373A3C;
+
+    padding: 21px 0px 0px 0px;
+    margin: 38px 282px 44px 282px;
+}
+
+.content__box-login{
+    text-align: center;
+}
+
+#id_username, #id_password{
+    width: 308px;
+    height: 38px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    display: block;  
+}
+
+#id_username{
+    margin: 0px 171px 0px 171px;
+}
+
+#id_password{
+    margin: 23px 171px 16px 171px;
+}
+
+.content__box-button{
+    margin: 0px 171px 131px 394px;
+}
+
+.content__box-error{
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 79px;
+
+    color: #e82c1e;
+}
+
+.header,.header__left,.header__right{
+    display: flex;
+}
+
+.header{
+    background: #F7F7F9;
+    border-radius: 4px;
+}
+
+.header__left{
+    float: left;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.header__right{
+    float: right;
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.header__left-label{
+    width: 142.9px;
+    height: 17px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 17px;
+
+    margin: 16px 16.5px 21px 62px;
+    
+    
+}
+
+.header__left-menu{
+    text-decoration: none;
+    width: 111.02px;
+    height: 16px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+
+    margin: 18px 820px 20px 0px;
+}
+
+.header__right-welcome{
+    width: 129px;
+    height: 16px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px; 
+    
+    margin: 19px 0px 19px 0px;   
+}
+
+.header__right-button{
+    width: 58px;
+    height: 16px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+
+    background:  #F7F7F9;
+    color: rgba(0, 0, 0, 0.3);
+    border: none;
+
+    margin: 19px 86px 19px 11px;
+}
+
+.content_top-menu{
+    display: flex;
+}
+
+.content__top-label{
+    width: 238.85px;
+    height: 26px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 26px;
+
+    color: #373A3C;
+    margin: 28px 600px 0px 67px;
+}
+
+.content__top-buttonnew{
+    box-sizing: content-box;
+    text-decoration: none;
+    width: 130px;
+    height: 39px;
+
+    background: #5CB85C;
+    border: 1px solid #5CB85C;
+    border-radius: 4px;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+
+    color: #FFFFFF;
+    padding: 8.5px 10px 9.5px 10px;
+    margin: 85px 300px 15px 950px;
+}
+
+.content_table{
+    margin-top: 15px;
+    border: 1px solid #ECEEEF;
+    padding: 0px;
+}
+
+.content__th-title,.content__th-modified,.content__th-action,.content__td-title,.content__td-modified,.content__td-action{
+    width: 289.51px;
+    height: 50px;
+
+    padding-left: 17px;
+}
+
+.content__th-number,.content__td-number{
+    width: 115.81px;
+    height: 50px;
+
+    padding-left: 17px;
+}
