@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/scrypt.js' defer %}"></script>
 </head>
 
 <body>
+  <div id="url"></div>
   <header class="header">
     {% block header %}
       <div class="header">

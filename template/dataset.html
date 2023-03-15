@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %} Data Set {% endblock %}
+
+{% block content %}
+    <div>
+        <h2> {{dataset.dataset_schema.schema_name}} </h2>
+        <a href="#">Edit scheme</a>
+    </div>
+    
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Column name</th>
+            <th>Column type</th>
+        </tr>
+        {% for column in columns %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ column.column_name}}</td>
+                <td>{{ column.column_type }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div>
+        <h2>Data sets</h2>
+        <form method="POST">
+            <label for="rows">Rows</label>
+            <input id="rows" type="number">
+            <button onclick="generateDataSet('{{dataset.dataset_id}}')" type="submit">Generate data</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Created</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for csv_dataset in csv_datasets %}
+            <td>{{ forloop.counter }}</td>
+            <td>{{csv_dataset.csv_dataset_created_at}}</td>
+            <td>{{csv_dataset.csv_dataset_status}}</td>
+            <td><a href="#">Download</a></td>
+        {% endfor %}
+    </table>
+    
+
+{% endblock %}

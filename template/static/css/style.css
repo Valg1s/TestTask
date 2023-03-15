@@ -1,6 +1,12 @@
 th,td{
     border: solid 1px #ECEEEF;
     text-align: left;
+
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 
@@ -66,7 +72,9 @@ button{
     background: #FFFFFF;
     border: 1px solid #CCCCCC;
     border-radius: 4px;
-    display: block;  
+
+    display: block; 
+     
 }
 
 #id_username{
@@ -130,12 +138,6 @@ button{
     width: 111.02px;
     height: 16px;
 
-    font-family: 'Helvetica Neue';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 16px;
-
     margin: 18px 820px 20px 0px;
 }
 
@@ -143,11 +145,6 @@ button{
     width: 129px;
     height: 16px;
 
-    font-family: 'Helvetica Neue';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 16px; 
     
     margin: 19px 0px 19px 0px;   
 }
@@ -155,12 +152,6 @@ button{
 .header__right-button{
     width: 58px;
     height: 16px;
-
-    font-family: 'Helvetica Neue';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 16px;
 
     background:  #F7F7F9;
     color: rgba(0, 0, 0, 0.3);
@@ -197,12 +188,6 @@ button{
     border: 1px solid #5CB85C;
     border-radius: 4px;
 
-    font-family: 'Helvetica Neue';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 21px;
-
     color: #FFFFFF;
     padding: 8.5px 10px 9.5px 10px;
     margin: 85px 300px 15px 950px;
@@ -226,4 +211,205 @@ button{
     height: 50px;
 
     padding-left: 17px;
+}
+
+.content_tb-editlink,.content_tb-deletelink{
+    text-decoration: none;
+}
+
+.content_tb-editlink{
+    color: #0275D8;
+}
+
+.content_tb-deletelink{
+    color: #D9534F;
+    margin-left: 23px;
+}
+
+.content__td-titlelink{
+    color: #0275D8;
+    text-decoration: none;
+}
+
+.content__add-last_form{
+    border: 1px solid #E5E5E5;
+    border-radius: 4px;
+    width: 1200px;
+    height: 150px;
+}
+
+.content__add-schemaform {
+    display: flex;
+}
+
+.content__add-schemaform * {
+    display: block;
+}
+
+.content__add-schemaform-button{
+    margin-left: 448px;
+    margin-bottom: 15px;
+}
+
+.content__add-last_form_conteiner{
+    display: flex;
+    height: 95px;
+    
+}
+
+.content_add{
+    margin: 0px 287px 0px 86px;
+}
+
+.content__add-table{
+    border: none;
+}
+
+.content__add-td{
+    border: none;
+}
+
+.content__add-name{
+    width: 334px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding-left: 8px;
+    margin-right:20px;
+}
+
+.content__add-type{
+    width: 265px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding-left: 8px;
+    margin-right: 20px;
+}
+
+.content__add-specific-block{
+    width: 249px;
+    height: 38px;
+    border: none;
+    
+}
+
+.content__add-specific{
+    width: 249px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding-left: 8px;
+    margin-right: 55px;
+}
+
+.content__add-order{
+    width: 152px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.content__add-link-block{
+    border: none;
+    padding-top: 35px;
+}
+
+.content__add-link{
+    text-decoration: none;
+    width: 46px;
+    height: 21px;
+    line-height: 21px;
+    color: #D9534F;
+    
+}
+
+#id_schema_column_separator, #id_schema_string_character{
+    width: 540px;
+    height: 34px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+
+#id_schema_name{
+    width: 535px;
+    height: 30px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+
+.content__add-blocks *{
+    display: block;
+}
+
+.content__add-form-name{
+    width: 334px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding-left: 8px;
+    margin-right:20px;
+    margin-top: 12px;
+}
+
+.content__add-form-type{
+    width: 285px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding-left: 8px;
+    margin-right: 15px;
+    margin-top: 12px;
+}
+.content__add-form-order{
+    width: 152px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-top: 12px;
+}
+
+.content__add-specific-form-block{
+    width: 250px;
+    height: 38px;
+    margin-right: 70px;
+}
+
+
+#id_phone_numbers{
+    width: 263px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding-left: 8px;
+    margin-top: 12px;
+}
+
+#id_min_range, #id_max_range{
+    width: 115px;
+    height: 38px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding-left: 8px;
+    margin-top: 12px;
+}
+
+.content__add-range-block{
+    display: flex;
+    width: 130px;
+    
+}
+
+.content__add-form-range{
+    margin-right: 12px;
+}
+
+.content__add-form-range * {
+    display: block;
+}
+
+.content__add-form-button{
+    width: 121px;
 }

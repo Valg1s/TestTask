@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %} Add Schema {% endblock %}
+
+{% block content %}
+<div class="content_add">
+  <h2 class="content__add-label">New schema</h2>
+  
+  <form class="content__add-schemaform" method="POST">
+      <div>
+        {% csrf_token %}
+        {{ schema_form }}
+      </div>
+     
+      <button class="content__add-schemaform-button" type="submit">Submit</button>
+  </form>
+
+  <h2 class="content__add-label"> Schema columns </h2>
+    <table class="content__add-table">
+      {% for column in columns  %}
+      <tr class="content__add-tr">
+        <td class="content__add-td">
+            <p>Column name</p>
+            <p class="content__add-name">{{column.column_name }}</p>
+        </td>
+        <td class="content__add-td">
+          <p>Type</p>
+          <p class="content__add-type">{{ column.column_type }}</p>
+        </td>
+        <td  class="content__add-specific-block">
+            {%if column.column_type == "Phone number"%}
+              <p>Country code</p>
+              <p class="content__add-specific">{{column.column_specific}}</p>
+            {% elif column.column_type == "Integer" %}
+              <p>Range</p>
+              <p class="content__add-specific" >{{column.column_specific}}</p>
+            {% endif %}
+        </td>
+        <td class="content__add-td">
+          <p>Order</p>
+          <p class="content__add-order">{{column.column_order }}</p>
+        </td>
+        <td class="content__add-link-block">
+          <form id="id_delete_form_{{column.column_id}}" method="POST">
+            {% csrf_token %}
+            <input name="id" type="hidden" value="{{column.column_id}}">
+            <a href="#" onclick="submitForm('{{column.column_id}}')" class="content__add-link" >Delete</button>
+          </form>
+
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  
+
+  <form id="id_column_form" class="content__add-last_form"  method="POST">
+      <div class="content__add-last_form_conteiner" >
+        {% csrf_token %}
+
+        <div class="content__add-blocks">
+          {{ empty_column_form.column_name.label }}
+          {{ empty_column_form.column_name }}
+        </div>
+        <div class="content__add-blocks">
+          {{ empty_column_form.column_type.label }}
+          {{ empty_column_form.column_type }}
+        </div>
+        
+        <div class="content__add-specific-form-block">
+          <div class="content__add-range-block"  id="id_range_block" style="display: none;">
+            
+            <div class="content__add-form-range">
+              <label for="id_min_range">Min:</label>
+              <input type="number" name="min_range" required id="id_min_range">
+            </div>
+
+            <div class="content__add-form-range">
+              <label for="id_max_range">Max:</label></th>
+              <input type="number" name="max_range" required id="id_max_range">
+            
+            </div>
+          </div>
+  
+          <div id="id_phone_block" style="display: none;">
+              <label for="id_phone_numbers">Country code:</label>
+              <select name="phone_code" id="id_phone_numbers">
+                <option value="+380">Ukraine(+380)</option>
+                <option value="+48">Poland(+48)</option>
+                <option value="+1">USA(+1)</option>
+              </select>
+          </div>  
+        </div>
+        
+        <div class="content__add-blocks">
+          {{ empty_column_form.column_order.label }}
+          {{ empty_column_form.column_order }}
+        </div>
+
+      </div>
+
+      <button class="content__add-form-button" type="submit" onclick="addRowSendRequest()" >Add column</button>
+  </form>
+</div>
+  
+
+{% endblock %}

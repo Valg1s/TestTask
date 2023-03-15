@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 SPECIFICATOR = (
@@ -20,6 +21,11 @@ STRING_CHARACTER = (
     (1, "One-quote (')"),
 )
 
+STATUS = (
+    (0, "Progressing"),
+    (1, "Ready"),
+)
+
 
 class TypeOfData(models.Model):
     type_id = models.AutoField(primary_key=True)
@@ -33,25 +39,36 @@ class TypeOfData(models.Model):
         return f"{self.__class__.__name__}({self.type_id})"
 
     @staticmethod
-    def get_by_name(name):
-        type = TypeOfData.objects.filter(type_name=name).first()
+    def get_by_id(id):
+        type_of_data = TypeOfData.objects.filter(type_id=id).first()
 
-        if type:
-            return type
+        if type_of_data:
+            return type_of_data
+
+    @staticmethod
+    def get_by_name(name):
+        type_of_data = TypeOfData.objects.filter(type_name=name).first()
+
+        if type_of_data:
+            return type_of_data
 
         raise Exception("Type didn't find")
 
     @staticmethod
     def create(name, specification=None):
-        type = TypeOfData.objects.create(type_name=name,type_specific = specification)
+        type_of_data = TypeOfData.objects.create(type_name=name,type_specific = specification)
 
-        type.save()
+        type_of_data.save()
 
-        return type
+        return type_of_data
 
     @staticmethod
     def delete_by_name(name):
         TypeOfData.objects.filter(type_name=name).first().delete()
+
+    @staticmethod
+    def delete_by_id(id):
+        TypeOfData.objects.filter(type_id=id).first().delete()
 
     @staticmethod
     def get_all():
@@ -63,6 +80,7 @@ class SchemaColumn(models.Model):
     column_name = models.TextField(max_length=128, verbose_name="Column name")
     column_type = models.ForeignKey(TypeOfData, on_delete=models.DO_NOTHING, verbose_name="Type",
                                     related_name="column_type")
+    column_specific = models.TextField(max_length=64, null=True, blank=True)
     column_order = models.IntegerField(verbose_name="Order")
 
     class Meta:
@@ -79,19 +97,20 @@ class SchemaColumn(models.Model):
         return SchemaColumn.objects.filter(column_id=id).first()
 
     @staticmethod
-    def create(name, type, order):
-        schema = SchemaColumn.objects.create(column_name = name, column_type = type, column_order = order)
+    def create(name, type_of_data,specific, order):
+        schema = SchemaColumn.objects.create(column_name = name, column_type = type_of_data,
+                                             column_specific=specific, column_order = order)
 
         schema.save()
 
         return schema
 
-    def update(self, name=None, type=None, order=None):
+    def update(self, name=None, type_of_data=None, order=None):
         if name:
             self.column_name = name
 
-        if type:
-            self.column_type = type
+        if type_of_data:
+            self.column_type = type_of_data
 
         # Create validation of orders
         if order:
@@ -107,6 +126,14 @@ class SchemaColumn(models.Model):
     def get_all():
         return SchemaColumn.objects.all()
 
+    def to_dict(self):
+        return {
+            "name": self.column_name,
+            "type": self.column_type,
+            "specific": self.column_specific,
+            "order": self.column_order,
+        }
+
 
 class Schema(models.Model):
     schema_id = models.AutoField(primary_key=True)
@@ -118,7 +145,7 @@ class Schema(models.Model):
     schema_last_modified = models.DateField(verbose_name="Modified",auto_now=True)
 
     def __str__(self):
-        return f"{self.user}:{self.schema_name}"
+        return f"{self.schema_user}:{self.schema_name}"
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.schema_id})"
@@ -146,13 +173,19 @@ class Schema(models.Model):
         if character:
             self.schema_string_character = character
 
+        self.schema_last_modified = timezone.now()
+
         self.save()
 
     def add_column(self,column):
-        columns = self.schema_columns.all().last()
+        columns = self.schema_columns.all()
+        sub_list = []
 
         if columns:
-            if column.column_order <= columns.column_order:
+            for cl in columns:
+                sub_list.append(cl.column_order)
+
+            if column.column_order in sub_list:
                 raise Exception("This order number already reserved")
 
         self.schema_columns.add(column)
@@ -165,3 +198,66 @@ class Schema(models.Model):
         return Schema.objects.filter(schema_user=user_id).all()
 
 
+class CSVDataSet(models.Model):
+    csv_dataset_id = models.AutoField(primary_key=True)
+    csv_dataset_created_at = models.DateField(verbose_name="Created at",auto_now=True)
+    csv_dataset_status = models.IntegerField(choices=STATUS)
+    csv_dataset_file = models.FileField(upload_to="media/",blank=True,null=True)
+
+    def __str__(self):
+        return f"{self.csv_dataset_created_at}|{self.csv_dataset_status}"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.csv_dataset_id})"
+
+    @staticmethod
+    def get_by_id(id):
+        return CSVDataSet.objects.filter(csv_dataset_id=id).first()
+
+    @staticmethod
+    def create():
+        csv_set = CSVDataSet.objects.create(csv_dataset_status=0)
+
+        csv_set.save()
+
+        return csv_set
+
+    def change_status(self):
+        self.csv_dataset_status = 1
+
+        self.save()
+
+
+class DataSet(models.Model):
+    dataset_id = models.AutoField(primary_key=True)
+    dataset_schema = models.ForeignKey(Schema,on_delete=models.CASCADE, related_name="dataset_schema")
+    dataset_csv = models.ManyToManyField(CSVDataSet,related_name="dataset_csv")
+
+    def __str__(self):
+        return f"{self.dataset_id}|{self.dataset_schema}"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.dataset_id})"
+
+    @staticmethod
+    def get_by_id(id):
+        return DataSet.objects.filter(dataset_id=id).first()
+
+    @staticmethod
+    def create(schema):
+        dataset = DataSet.objects.create(dataset_schema=schema)
+
+        dataset.save()
+
+        return dataset
+
+    @staticmethod
+    def get_by_schema_id(schema_id):
+        schema = Schema.get_by_id(schema_id)
+
+        dataset = DataSet.objects.filter(dataset_schema=schema).first()
+
+        return dataset
+
+    def add_csv(self,scv_dataset):
+        self.dataset_csv.add(scv_dataset)

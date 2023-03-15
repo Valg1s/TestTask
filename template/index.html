@@ -4,7 +4,7 @@
 
 {% block content %}
       <p class="content__top-label">Data schemas</p>
-      <a class="content__top-buttonnew" href="/schema/add">New schema</a>
+      <a class="content__top-buttonnew" href="{% url 'add' %}">New schema</a>
     
   <table class="content_table">
     <tr>
@@ -17,11 +17,11 @@
     {% for schema in schemas %}
     <tr>
       <td class="content__td-number"> {{ forloop.counter }} </td>
-      <td class="content__td-title"> {{ schema.schema_name }} </td>
+      <td class="content__td-title"> <a class="content__td-titlelink" href="{% url 'check_dataset' schema_id=schema.schema_id %}">{{ schema.schema_name }}</a>  </td>
       <td class="content__td-modified"> {{ schema.schema_last_modified }} </td>
       <td class="content__td-action">
-        <a>Edit schema</a>
-        <a>Delete</a>
+        <a href="#" class="content_tb-editlink">Edit schema</a>
+        <a href="#" class="content_tb-deletelink">Delete</a>
       </td>
     </tr>
     {% endfor %}
