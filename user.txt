@@ -1,5 +1,2 @@
-login: User
+login: TestUser
 password: Strongpassword123
-
-login: Admin
-password: 12345
