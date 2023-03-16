@@ -1,4 +1,5 @@
 
+
 function addRowSendRequest(){
     
     var name = document.getElementById('id_column_name').value
@@ -23,41 +24,27 @@ function addRowSendRequest(){
     "order":order
     }
 
-    
-    var xhr = new XMLHttpRequest();
-
-    xhr.open('POST', '/add/');
-    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-    xhr.onreadystatechange = function() {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            const table = document.getElementById("id_columns_table");
-
-            table.innerHTML += response.html;
-            
+    axios.post(window.location.pathname.toString(),data,
+    {headers: {
+        'Content-Type': 'application/json'
         }
-    };
+    }
+    ).then(function(response){
+        const table = document.getElementById("id_columns_table");
 
-    xhr.send(JSON.stringify(data));
-
+        table.innerHTML += response.data["html"];
+    })
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
-
-    if (window.location.pathname.toString() == '/add/') {
+    if (window.location.pathname.toString() == '/add/' || window.location.pathname.toString().substr(-5) == "edit/") {
         var select = document.getElementById("id_column_type")
-
-        var urlDiv = document.getElementById('url');
-        urlDiv.innerHTML = 'Текущий URL-адрес: ';
 
         select.addEventListener("change",function () {
 
         var range_block = document.getElementById("id_range_block")
         var phone_block = document.getElementById("id_phone_block") 
-
-        console.log(select)
 
         if (select.value == "4"){
             phone_block.style.display = "block";

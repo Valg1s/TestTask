@@ -6,7 +6,7 @@
 <div class="content_add">    
     <div class="content__dataset-label-block">
         <h2 class="content__dataset-label"> {{dataset.dataset_schema.schema_name}} </h2>
-        <a class="content__dataset-label-link" href="{% url 'edit' id=dataset.dataset_schema.schema_id %}">Edit scheme</a>
+        <a class="content__dataset-label-link" href="{% url 'edit' schema_id=dataset.dataset_schema.schema_id %}">Edit scheme</a>
     </div>
     
     <table>

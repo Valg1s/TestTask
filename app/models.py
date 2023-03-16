@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-# Create your models here.
 SPECIFICATOR = (
     (0, "Range(For INT)"),
     (1, "Country code(For PhoneNumber)"),
@@ -28,6 +27,7 @@ STATUS = (
 
 
 class TypeOfData(models.Model):
+    # Model for saving types fo data, like INT, FullName etc.
     type_id = models.AutoField(primary_key=True)
     type_name = models.TextField(max_length=64, verbose_name="Type", unique=True)
     type_specific = models.IntegerField(choices=SPECIFICATOR, default=None, null=True, blank=True)
@@ -39,8 +39,8 @@ class TypeOfData(models.Model):
         return f"{self.__class__.__name__}({self.type_id})"
 
     @staticmethod
-    def get_by_id(id):
-        type_of_data = TypeOfData.objects.filter(type_id=id).first()
+    def get_by_id(type_id):
+        type_of_data = TypeOfData.objects.filter(type_id=type_id).first()
 
         if type_of_data:
             return type_of_data
@@ -56,7 +56,7 @@ class TypeOfData(models.Model):
 
     @staticmethod
     def create(name, specification=None):
-        type_of_data = TypeOfData.objects.create(type_name=name,type_specific = specification)
+        type_of_data = TypeOfData.objects.create(type_name=name, type_specific=specification)
 
         type_of_data.save()
 
@@ -67,8 +67,8 @@ class TypeOfData(models.Model):
         TypeOfData.objects.filter(type_name=name).first().delete()
 
     @staticmethod
-    def delete_by_id(id):
-        TypeOfData.objects.filter(type_id=id).first().delete()
+    def delete_by_id(type_id):
+        TypeOfData.objects.filter(type_id=type_id).first().delete()
 
     @staticmethod
     def get_all():
@@ -76,6 +76,7 @@ class TypeOfData(models.Model):
 
 
 class SchemaColumn(models.Model):
+    # Model for "columns" , with name ,type of data etc
     column_id = models.AutoField(primary_key=True)
     column_name = models.TextField(max_length=128, verbose_name="Column name")
     column_type = models.ForeignKey(TypeOfData, on_delete=models.DO_NOTHING, verbose_name="Type",
@@ -93,13 +94,15 @@ class SchemaColumn(models.Model):
         return f"{self.__class__.__name__}({self.column_id})"
 
     @staticmethod
-    def get_by_id(id):
-        return SchemaColumn.objects.filter(column_id=id).first()
+    def get_by_id(column_id):
+        return SchemaColumn.objects.filter(column_id=column_id).first()
 
     @staticmethod
-    def create(name, type_of_data,specific, order):
-        schema = SchemaColumn.objects.create(column_name = name, column_type = type_of_data,
-                                             column_specific=specific, column_order = order)
+    def create(name, type_of_data, specific, order):
+        if order < 0:
+            raise ValueError("Order can`t be lower then 0")
+        schema = SchemaColumn.objects.create(column_name=name, column_type=type_of_data,
+                                             column_specific=specific, column_order=order)
 
         schema.save()
 
@@ -119,8 +122,8 @@ class SchemaColumn(models.Model):
         self.save()
 
     @staticmethod
-    def delete_by_id(id):
-        SchemaColumn.objects.filter(column_id=id).first().delete()
+    def delete_by_id(column_id):
+        SchemaColumn.objects.filter(column_id=column_id).first().delete()
 
     @staticmethod
     def get_all():
@@ -136,13 +139,14 @@ class SchemaColumn(models.Model):
 
 
 class Schema(models.Model):
+    # Model for schema , with name,delimiter, quotechar, and columns
     schema_id = models.AutoField(primary_key=True)
-    schema_user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="schema_user")
+    schema_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="schema_user")
     schema_name = models.TextField(max_length=128, verbose_name="Name")
-    schema_column_separator = models.IntegerField(choices=SEPARATOR,default=0,verbose_name="Column separator")
-    schema_string_character = models.IntegerField(choices=STRING_CHARACTER,default=0,verbose_name="String character")
-    schema_columns = models.ManyToManyField(SchemaColumn,related_name="schema_columns")
-    schema_last_modified = models.DateField(verbose_name="Modified",auto_now=True)
+    schema_column_separator = models.IntegerField(choices=SEPARATOR, default=0, verbose_name="Column separator")
+    schema_string_character = models.IntegerField(choices=STRING_CHARACTER, default=0, verbose_name="String character")
+    schema_columns = models.ManyToManyField(SchemaColumn, related_name="schema_columns")
+    schema_last_modified = models.DateField(verbose_name="Modified", auto_now=True)
 
     def __str__(self):
         return f"{self.schema_user}:{self.schema_name}"
@@ -151,11 +155,11 @@ class Schema(models.Model):
         return f"{self.__class__.__name__}({self.schema_id})"
 
     @staticmethod
-    def get_by_id(id):
-        return Schema.objects.filter(schema_id=id).first()
+    def get_by_id(schema_id):
+        return Schema.objects.filter(schema_id=schema_id).first()
 
     @staticmethod
-    def create(user,name,separator,character):
+    def create(user, name, separator, character):
         schema = Schema.objects.create(schema_user=user, schema_name=name,
                                        schema_column_separator=separator, schema_string_character=character)
 
@@ -163,7 +167,7 @@ class Schema(models.Model):
 
         return schema
 
-    def update(self, name = None, separator = None,character = None):
+    def update(self, name=None, separator=None, character=None):
         if name:
             self.schema_name = name
 
@@ -177,7 +181,7 @@ class Schema(models.Model):
 
         self.save()
 
-    def add_column(self,column):
+    def add_column(self, column):
         columns = self.schema_columns.all()
         order_list = []
         name_list = []
@@ -188,11 +192,11 @@ class Schema(models.Model):
                 name_list.append(cl.column_name)
 
             if column.column_order in order_list or column.column_name in name_list:
-                raise Exception("This order number or name already reserved")
+                raise ValueError("This order number or name already reserved")
 
         self.schema_columns.add(column)
 
-    def delete_column(self,column):
+    def delete_column(self, column):
         self.schema_columns.remove(column)
 
     @staticmethod
@@ -200,16 +204,42 @@ class Schema(models.Model):
         return Schema.objects.filter(schema_user=user_id).all()
 
     @staticmethod
-    def delete_by_id(id):
-        Schema.get_by_id(id).delete()
+    def delete_by_id(schema_id):
+        Schema.get_by_id(schema_id).delete()
+
+    def get_delimiter(self):
+        delimiter = self.schema_column_separator
+
+        if delimiter == 0:
+            delimiter = ","
+        elif delimiter == 1:
+            delimiter = ";"
+        elif delimiter == 2:
+            delimiter = "    "
+        elif delimiter == 3:
+            delimiter = " "
+        elif delimiter == 4:
+            delimiter = "|"
+
+        return delimiter
+
+    def get_character(self):
+        quotechar = self.schema_string_character
+
+        if quotechar == 0:
+            quotechar = '"'
+        elif quotechar == 1:
+            quotechar = "'"
+
+        return quotechar
 
 
 class CSVDataSet(models.Model):
+    # Model for csv files and info about it
     csv_dataset_id = models.AutoField(primary_key=True)
-    csv_dataset_created_at = models.DateField(verbose_name="Created at",auto_now=True)
+    csv_dataset_created_at = models.DateField(verbose_name="Created at", auto_now=True)
     csv_dataset_status = models.IntegerField(choices=STATUS)
-    csv_dataset_file = models.FileField(blank=True,null=True)
-    csv_dataset_link = models.CharField(max_length=256,blank=True,null=True)
+    csv_dataset_file = models.FileField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.csv_dataset_created_at}|{self.csv_dataset_status}"
@@ -218,8 +248,8 @@ class CSVDataSet(models.Model):
         return f"{self.__class__.__name__}({self.csv_dataset_id})"
 
     @staticmethod
-    def get_by_id(id):
-        return CSVDataSet.objects.filter(csv_dataset_id=id).first()
+    def get_by_id(csv_id):
+        return CSVDataSet.objects.filter(csv_dataset_id=csv_id).first()
 
     @staticmethod
     def create():
@@ -236,9 +266,10 @@ class CSVDataSet(models.Model):
 
 
 class DataSet(models.Model):
+    # Model ,what`s math schema and csv files
     dataset_id = models.AutoField(primary_key=True)
-    dataset_schema = models.ForeignKey(Schema,on_delete=models.CASCADE, related_name="dataset_schema")
-    dataset_csv = models.ManyToManyField(CSVDataSet,related_name="dataset_csv")
+    dataset_schema = models.ForeignKey(Schema, on_delete=models.CASCADE, related_name="dataset_schema")
+    dataset_csv = models.ManyToManyField(CSVDataSet, related_name="dataset_csv")
 
     def __str__(self):
         return f"{self.dataset_id}|{self.dataset_schema}"
@@ -247,8 +278,8 @@ class DataSet(models.Model):
         return f"{self.__class__.__name__}({self.dataset_id})"
 
     @staticmethod
-    def get_by_id(id):
-        return DataSet.objects.filter(dataset_id=id).first()
+    def get_by_id(dataset_id):
+        return DataSet.objects.filter(dataset_id=dataset_id).first()
 
     @staticmethod
     def create(schema):
@@ -266,5 +297,5 @@ class DataSet(models.Model):
 
         return dataset
 
-    def add_csv(self,scv_dataset):
+    def add_csv(self, scv_dataset):
         self.dataset_csv.add(scv_dataset)

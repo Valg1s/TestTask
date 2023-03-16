@@ -8,10 +8,10 @@
       <p class="content__add-type">{{ column.column_type }}</p>
     </td>
     <td  class="content__add-specific-block">
-        {%if column.column_type == "Phone number"%}
+        {%if column.column_type.type_name == "Phone number"%}
           <p>Country code</p>
           <p class="content__add-specific">{{column.column_specific}}</p>
-        {% elif column.column_type == "Integer" %}
+        {% elif column.column_type.type_name == "Integer" %}
           <p>Range</p>
           <p class="content__add-specific" >{{column.column_specific}}</p>
         {% endif %}

@@ -20,7 +20,7 @@
       <td class="content__td-title"> <a class="content__td-titlelink" href="{% url 'check_dataset' schema_id=schema.schema_id %}">{{ schema.schema_name }}</a>  </td>
       <td class="content__td-modified"> {{ schema.schema_last_modified|date:'Y-m-d' }} </td>
       <td class="content__td-action-index">
-        <a href="{% url 'edit' id=schema.schema_id %}" class="content_tb-editlink">Edit schema</a>
+        <a href="{% url 'edit' schema_id=schema.schema_id %}" class="content_tb-editlink">Edit schema</a>
         <form class="content_index-form" id="id_delete_form_{{schema.schema_id}}" method="POST">
           {% csrf_token %}
           <input name="id" type="hidden" value="{{schema.schema_id}}">
