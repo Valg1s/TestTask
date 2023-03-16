@@ -16,7 +16,7 @@
   </form>
 
   <h2 class="content__add-label"> Schema columns </h2>
-    <table class="content__add-table">
+    <table id="id_columns_table" class="content__add-table">
       {% for column in columns  %}
       <tr class="content__add-tr">
         <td class="content__add-td">
@@ -44,7 +44,7 @@
           <form id="id_delete_form_{{column.column_id}}" method="POST">
             {% csrf_token %}
             <input name="id" type="hidden" value="{{column.column_id}}">
-            <a href="#" onclick="submitForm('{{column.column_id}}')" class="content__add-link" >Delete</button>
+            <a href="#" onclick="submitForm('{{column.column_id}}')" class="content__add-link" >Delete</a>
           </form>
 
         </td>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="content__add-form-range">
-              <label for="id_max_range">Max:</label></th>
+              <label for="id_max_range">Max:</label>
               <input type="number" name="max_range" required id="id_max_range">
             
             </div>

@@ -1,0 +1,31 @@
+<tr class="content__add-tr">
+    <td class="content__add-td">
+        <p>Column name</p>
+        <p class="content__add-name">{{column.column_name }}</p>
+    </td>
+    <td class="content__add-td">
+      <p>Type</p>
+      <p class="content__add-type">{{ column.column_type }}</p>
+    </td>
+    <td  class="content__add-specific-block">
+        {%if column.column_type == "Phone number"%}
+          <p>Country code</p>
+          <p class="content__add-specific">{{column.column_specific}}</p>
+        {% elif column.column_type == "Integer" %}
+          <p>Range</p>
+          <p class="content__add-specific" >{{column.column_specific}}</p>
+        {% endif %}
+    </td>
+    <td class="content__add-td">
+      <p>Order</p>
+      <p class="content__add-order">{{column.column_order }}</p>
+    </td>
+    <td class="content__add-link-block">
+      <form id="id_delete_form_{{column.column_id}}" method="POST">
+        {% csrf_token %}
+        <input name="id" type="hidden" value="{{column.column_id}}">
+        <a href="#" onclick="submitForm('{{column.column_id}}')" class="content__add-link" >Delete</a>
+      </form>
+
+    </td>
+</tr>

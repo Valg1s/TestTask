@@ -3,50 +3,60 @@
 {% block title %} Data Set {% endblock %}
 
 {% block content %}
-    <div>
-        <h2> {{dataset.dataset_schema.schema_name}} </h2>
-        <a href="#">Edit scheme</a>
+<div class="content_add">    
+    <div class="content__dataset-label-block">
+        <h2 class="content__dataset-label"> {{dataset.dataset_schema.schema_name}} </h2>
+        <a class="content__dataset-label-link" href="{% url 'edit' id=dataset.dataset_schema.schema_id %}">Edit scheme</a>
     </div>
     
-
     <table>
         <tr>
-            <th>#</th>
-            <th>Column name</th>
-            <th>Column type</th>
+            <th class="content__th-number">#</th>
+            <th class="content__th-title">Column name</th>
+            <th class="content__th-action">Column type</th>
         </tr>
         {% for column in columns %}
             <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ column.column_name}}</td>
-                <td>{{ column.column_type }}</td>
+                <td class="content__td-number">{{ forloop.counter }}</td>
+                <td class="content__td-title">{{ column.column_name}}</td>
+                <td class="content__td-action">{{ column.column_type }}</td>
             </tr>
         {% endfor %}
     </table>
 
-    <div>
-        <h2>Data sets</h2>
-        <form method="POST">
-            <label for="rows">Rows</label>
-            <input id="rows" type="number">
-            <button onclick="generateDataSet('{{dataset.dataset_id}}')" type="submit">Generate data</button>
-        </form>
+    <div class = "content__dataset-label-block">
+        <h2 class="content__dataset-label">Data sets</h2>
+        <div class="content__dataset-row-form">
+            <label for="rows">Rows:</label>
+            <input class="content__dataset-input" id="rows" type="number">
+            <button class="content__dataset-button-generator" href="" onclick="generateDataSet('{{dataset.dataset_id}}')">Generate data</button>
+        </div>
     </div>
 
-    <table>
+    <table id="id_csv_sets_table">
         <tr>
-            <th>#</th>
-            <th>Created</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th class="content__th-number" >#</th>
+            <th class="content__th-title">Created</th>
+            <th class="content__th-modified">Status</th>
+            <th class="content__th-action">Actions</th>
         </tr>
         {% for csv_dataset in csv_datasets %}
-            <td>{{ forloop.counter }}</td>
-            <td>{{csv_dataset.csv_dataset_created_at}}</td>
-            <td>{{csv_dataset.csv_dataset_status}}</td>
-            <td><a href="#">Download</a></td>
+        <tr>
+            <td class="content__td-number" id="id_counter" >{{ forloop.counter }}</td>
+            <td class="content__td-title" >{{csv_dataset.csv_dataset_created_at|date:'Y-m-d'}}</td>
+            {% if csv_dataset.csv_dataset_status == 1 %}
+            <td>
+                 <p id="id_status_{{forloop.counter}}" class="content__dataset-ready">Ready</p>  
+            </td>
+            {% else %}
+            <td>
+                 <p  id="id_status_{{ forloop.counter }}" class="content__dataset-proccesing">Proccesing</p>
+            </td>
+            {% endif %}
+            <td class="content__td-action" ><a class="content__dataset-link-download" href="{{ csv_dataset.csv_dataset_file.url }}">Download</a></td>
+        </tr>
         {% endfor %}
     </table>
-    
+</div>
 
 {% endblock %}

@@ -179,14 +179,16 @@ class Schema(models.Model):
 
     def add_column(self,column):
         columns = self.schema_columns.all()
-        sub_list = []
+        order_list = []
+        name_list = []
 
         if columns:
             for cl in columns:
-                sub_list.append(cl.column_order)
+                order_list.append(cl.column_order)
+                name_list.append(cl.column_name)
 
-            if column.column_order in sub_list:
-                raise Exception("This order number already reserved")
+            if column.column_order in order_list or column.column_name in name_list:
+                raise Exception("This order number or name already reserved")
 
         self.schema_columns.add(column)
 
@@ -197,12 +199,17 @@ class Schema(models.Model):
     def get_by_user_id(user_id):
         return Schema.objects.filter(schema_user=user_id).all()
 
+    @staticmethod
+    def delete_by_id(id):
+        Schema.get_by_id(id).delete()
+
 
 class CSVDataSet(models.Model):
     csv_dataset_id = models.AutoField(primary_key=True)
     csv_dataset_created_at = models.DateField(verbose_name="Created at",auto_now=True)
     csv_dataset_status = models.IntegerField(choices=STATUS)
-    csv_dataset_file = models.FileField(upload_to="media/",blank=True,null=True)
+    csv_dataset_file = models.FileField(blank=True,null=True)
+    csv_dataset_link = models.CharField(max_length=256,blank=True,null=True)
 
     def __str__(self):
         return f"{self.csv_dataset_created_at}|{self.csv_dataset_status}"

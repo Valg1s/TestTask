@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{% static 'js/scrypt.js' defer %}"></script>
 </head>
 
@@ -19,7 +20,7 @@
         </div>
         <div class="header__right">
           <p class="header__right-welcome">Welcome, <b> {{user.username}} </b></p>
-          <form class="header__right-logout" method="POST">
+          <form action="/" class="header__right-logout" method="POST">
             {% csrf_token %}
             <input type="hidden" name="user" value="{{user.id}}">
             <button class="header__right-button" type="submit">Logout</button>
