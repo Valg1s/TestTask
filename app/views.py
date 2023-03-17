@@ -236,10 +236,6 @@ def create_schema(request, schema_id=None):
 
     empty_column_form = SchemaColumnForm()
 
-    for cl in schema.schema_columns.all():
-        print(cl.to_dict())
-        print(cl.column_type in [4,5])
-
     context = {
         "schema_form": schema_form,
         "empty_column_form": empty_column_form,
