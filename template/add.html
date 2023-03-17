@@ -53,9 +53,8 @@
     </table>
   
 
-  <form id="id_column_form" class="content__add-last_form"  method="POST">
+  <div id="id_column_form" class="content__add-last_form">
       <div class="content__add-last_form_conteiner" >
-        {% csrf_token %}
 
         <div class="content__add-blocks">
           {{ empty_column_form.column_name.label }}
@@ -99,7 +98,7 @@
       </div>
 
       <button class="content__add-form-button" type="submit" onclick="addRowSendRequest()" >Add column</button>
-  </form>
+  </div>
 </div>
   
 
