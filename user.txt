@@ -1,2 +1,0 @@
-login: TestUser
-password: Strongpassword123
